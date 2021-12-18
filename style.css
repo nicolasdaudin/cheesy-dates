@@ -89,8 +89,8 @@ nav {
   max-width: 100rem;
   margin: 4rem auto;
   display: grid;
-  grid-template-columns: 4fr 1fr;
-  grid-template-rows: repeat(3, 15rem);
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 8rem 60rem;
   gap: 2rem;
 
   /* NOTE This creates the fade in/out anumation */
@@ -100,7 +100,7 @@ nav {
 
 /* EVENTS */
 .events {
-  grid-row: 1 / span 3;
+  grid-column: span 3;
   background-color: #fff;
   border-radius: 1rem;
   overflow: scroll;
