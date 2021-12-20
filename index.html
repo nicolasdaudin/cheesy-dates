@@ -47,6 +47,35 @@
           <div class="events__value">-378€</div>
         </div>
       </div>
+
+      <div class="overlay hidden"></div>
+      <div class="add-event-window hidden">
+        <button class="btn--close-modal">&times;</button>
+        <form class="upload">
+          <h3 class="upload-heading">
+            Ajouter une date anniversaire (mariage,...)
+          </h3>
+
+          <label>Description</label>
+          <input
+            value="Amelia's birthday"
+            required
+            name="description"
+            type="text"
+          />
+          <label>Date of first occurrence</label>
+          <input value="2019/11/10" required name="date" type="text" />
+          <p class="help">
+            La date doit être la toute première date où c'est arrivé
+          </p>
+          <label>Commentaire</label>
+          <input name="commentaire" type="text" />
+
+          <button class="btn upload__btn">
+            <span>Upload</span>
+          </button>
+        </form>
+      </div>
     </main>
 
     <footer>

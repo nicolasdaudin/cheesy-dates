@@ -155,7 +155,7 @@ nav {
 /* ADD-EVENT BUTTONS */
 .add-event {
   border-radius: 1rem;
-  padding: 3rem 4rem;
+  padding: 2rem 3rem;
   color: #333;
 }
 
@@ -171,6 +171,53 @@ nav {
   background-image: linear-gradient(to top left, #e52a5a, #ff585f);
 }
 
+.add-event-window {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60rem;
+  background-color: white;
+  border-radius: 9px;
+
+  padding: 5rem 6rem;
+  box-shadow: 0 4rem 6rem rgba(0, 0, 0, 0.25);
+
+  z-index: 1000;
+  transition: all 0.5s;
+}
+
+.btn--close-modal {
+  font-family: inherit;
+  color: inherit;
+  position: absolute;
+  top: 0.5rem;
+  right: 1.6rem;
+  font-size: 3.5rem;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  background-color: rgba(0, 0, 0, 0.4);
+  /* backdrop-filter: blur(4px); */
+
+  z-index: 100;
+  transition: all 0.5s;
+}
+
+.hidden {
+  visibility: hidden;
+  opacity: 0;
+}
+
 h2 {
   margin-bottom: 1.5rem;
   font-size: 1.7rem;
@@ -178,66 +225,53 @@ h2 {
   color: #333;
 }
 
-.form {
+.upload {
   display: grid;
-  grid-template-columns: 2.5fr 2.5fr 1fr;
-  grid-template-rows: auto auto;
-  gap: 0.4rem 1rem;
+  grid-template-columns: 1fr 3fr;
+  gap: 1rem 2rem;
+  align-items: center;
 }
 
-/* Exceptions for interst */
-.form.form--loan {
-  grid-template-columns: 2.5fr 1fr 2.5fr;
+.upload .upload-heading {
+  grid-column: 1/-1;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  font-size: 2rem;
+  font-weight: 700;
 }
-.form__label--loan {
-  grid-row: 2;
-}
-/* End exceptions */
 
-.form__input {
-  width: 100%;
-  border: none;
-  background-color: rgba(255, 255, 255, 0.4);
-  font-family: inherit;
+.upload .help {
+  grid-column: 2/-1;
+  font-size: 1rem;
+  color: darkgray;
+  font-style: italic;
+  margin-top: -1rem;
+}
+
+.upload label {
   font-size: 1.5rem;
-  text-align: center;
-  color: #333;
-  padding: 0.3rem 1rem;
-  border-radius: 0.7rem;
-  transition: all 0.3s;
-}
-
-.form__input:focus {
-  outline: none;
-  background-color: rgba(255, 255, 255, 0.6);
-}
-
-.form__label {
-  font-size: 1.3rem;
-  text-align: center;
-}
-
-.form__btn {
-  border: none;
-  border-radius: 0.7rem;
-  font-size: 1.8rem;
-  background-color: #fff;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-.form__btn:focus {
-  outline: none;
-  background-color: rgba(255, 255, 255, 0.8);
-}
-
-.logout-timer {
-  padding: 0 0.3rem;
-  margin-top: 1.9rem;
-  text-align: right;
-  font-size: 1.25rem;
-}
-
-.timer {
   font-weight: 600;
+}
+
+.upload input {
+  font-size: 1.5rem;
+  padding: 1rem 2rem;
+  border: 1px solid #ddd;
+  border-radius: 1rem;
+}
+
+.upload .upload__btn {
+  grid-column: 1 / -1;
+  justify-self: center;
+  padding: 1.5rem 4rem;
+  font-size: 2rem;
+  font-weight: 600;
+  border-radius: 5rem;
+  border: 2px solid dark;
+  background: #fff;
+  text-transform: uppercase;
+  cursor: pointer;
+  color: darkred;
+
+  margin-top: 2rem;
 }

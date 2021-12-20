@@ -41,9 +41,16 @@ const labelWelcome = document.querySelector(".welcome");
 const containerApp = document.querySelector(".app");
 const containerEvents = document.querySelector(".events");
 
-const btnTransfer = document.querySelector(".form__btn--transfer");
-const btnLoan = document.querySelector(".form__btn--loan");
-const btnClose = document.querySelector(".form__btn--close");
+const btnAddEventAnniversary = document.querySelector(
+  ".add-event--anniversary"
+);
+const btnAddEventBirthday = document.querySelector(".add-event--birthday");
+const btnAddEventAchievement = document.querySelector(
+  ".add-event--achievement"
+);
+const containerOverLay = document.querySelector(".overlay");
+const containerAddEventWindow = document.querySelector(".add-event-window");
+const btnCloseAddEventWindow = document.querySelector(".btn--close-modal");
 
 /////////////////////////////////////////////////
 // Functions
@@ -85,6 +92,11 @@ const updateUI = function (acc) {
   displayMovements(acc);
 };
 
+const toggleAddEventWindow = function () {
+  containerOverLay.classList.toggle("hidden");
+  containerAddEventWindow.classList.toggle("hidden");
+};
+
 const init = function () {
   let currentAccount = account1;
 
@@ -103,5 +115,20 @@ const init = function () {
 
   // Update UI
   updateUI(currentAccount);
+
+  // Attach buttons handler
+  [btnAddEventAnniversary, btnAddEventBirthday, btnAddEventAchievement].forEach(
+    (btn) => {
+      btn.addEventListener("click", function () {
+        toggleAddEventWindow();
+      });
+    }
+  );
+  btnCloseAddEventWindow.addEventListener("click", function () {
+    toggleAddEventWindow();
+  });
+  containerOverLay.addEventListener("click", function () {
+    toggleAddEventWindow();
+  });
 };
 init();
