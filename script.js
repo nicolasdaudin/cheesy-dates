@@ -115,12 +115,12 @@ const createCheesyEvent = function (data) {
   let temp = dt.plus({ years: 1 });
   for (let i = 0; temp.year < 2040; i++) {
     const tempDate = temp.toLocaleString(DateTime.DATE_HUGE);
-    console.log(
-      `Celebrating ${Interval.fromDateTimes(dt, temp).length(
-        "years"
-      )} years on ${tempDate}`
-    );
-    reminders.push(temp.toLocaleString(DateTime.DATE_HUGE));
+    console.log(`Celebrating ${i + 1} years or ${i + 1} years on ${tempDate}`);
+    reminders.push({
+      dt: temp,
+      formatted: temp.toLocaleString(DateTime.DATE_HUGE),
+      type: { years: i + 1 },
+    });
     temp = temp.plus({ years: 1 });
   }
   // console.log(reminders);
@@ -130,15 +130,18 @@ const createCheesyEvent = function (data) {
   temp = dt.plus({ days: 1000 });
   for (let i = 0; temp.year < 2040; i++) {
     const tempDate = temp.toLocaleString(DateTime.DATE_HUGE);
-    console.log(
-      `Celebrating ${Interval.fromDateTimes(dt, temp).length(
-        "days"
-      )} days on ${tempDate}`
-    );
+    console.log(`Celebrating ${1000 * (i + 1)} days on ${tempDate}`);
 
-    reminders.push(temp.toLocaleString(DateTime.DATE_HUGE));
+    reminders.push({
+      dt: temp,
+      formatted: temp.toLocaleString(DateTime.DATE_HUGE),
+      type: { days: 1000 * (i + 1) },
+    });
     temp = temp.plus({ days: 1000 });
   }
+
+  reminders.sort((a, b) => (a.dt < b.dt ? -1 : 1));
+  console.log(reminders);
 };
 
 const init = function () {
