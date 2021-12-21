@@ -8,6 +8,8 @@
 // Data
 
 // DIFFERENT DATA! Contains movement dates, currency and locale
+var DateTime = luxon.DateTime;
+var Interval = luxon.Interval;
 
 const account1 = {
   reminders: [
@@ -52,6 +54,7 @@ const containerOverLay = document.querySelector(".overlay");
 const containerAddEventWindow = document.querySelector(".add-event-window");
 const btnCloseAddEventWindow = document.querySelector(".btn--close-modal");
 
+const formAddEvent = document.querySelector(".upload");
 /////////////////////////////////////////////////
 // Functions
 
@@ -97,6 +100,47 @@ const toggleAddEventWindow = function () {
   containerAddEventWindow.classList.toggle("hidden");
 };
 
+const createCheesyEvent = function (data) {
+  const eventFirstDate = data.date;
+
+  console.log(eventFirstDate);
+  const dt = DateTime.fromISO(eventFirstDate);
+  console.log(dt.toString());
+  console.log(dt.toLocaleString(DateTime.DATE_HUGE));
+
+  const reminders = [];
+
+  // birthdays
+  console.log("------BIRTHDAYS");
+  let temp = dt.plus({ years: 1 });
+  for (let i = 0; temp.year < 2040; i++) {
+    const tempDate = temp.toLocaleString(DateTime.DATE_HUGE);
+    console.log(
+      `Celebrating ${Interval.fromDateTimes(dt, temp).length(
+        "years"
+      )} years on ${tempDate}`
+    );
+    reminders.push(temp.toLocaleString(DateTime.DATE_HUGE));
+    temp = temp.plus({ years: 1 });
+  }
+  // console.log(reminders);
+
+  // days
+  console.log("------SPECIAL DAYS");
+  temp = dt.plus({ days: 1000 });
+  for (let i = 0; temp.year < 2040; i++) {
+    const tempDate = temp.toLocaleString(DateTime.DATE_HUGE);
+    console.log(
+      `Celebrating ${Interval.fromDateTimes(dt, temp).length(
+        "days"
+      )} days on ${tempDate}`
+    );
+
+    reminders.push(temp.toLocaleString(DateTime.DATE_HUGE));
+    temp = temp.plus({ days: 1000 });
+  }
+};
+
 const init = function () {
   let currentAccount = account1;
 
@@ -128,6 +172,24 @@ const init = function () {
     toggleAddEventWindow();
   });
   containerOverLay.addEventListener("click", function () {
+    toggleAddEventWindow();
+  });
+
+  formAddEvent.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    // retrieve form inputs
+    const formData = new FormData(this);
+    const dataArray = [...formData];
+    const data = Object.fromEntries(dataArray);
+
+    // create cheesy event
+    createCheesyEvent(data);
+
+    // clear input fields
+    formAddEvent.reset();
+
+    // close window
     toggleAddEventWindow();
   });
 };
