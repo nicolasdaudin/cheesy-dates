@@ -12,6 +12,18 @@ var DateTime = luxon.DateTime;
 var Interval = luxon.Interval;
 
 const account1 = {
+  events: [
+    {
+      type: "anniversary",
+      description: "Ensemble avec Jime",
+      reminders: [
+        {
+          date: DateTime.fromISO("2021-12-14T21:31:17.178Z"),
+          type: { months: 123 },
+        },
+      ],
+    },
+  ],
   reminders: [
     {
       type: "anniversary",
@@ -74,19 +86,27 @@ const formatMovementDate = function (date, locale) {
 const displayMovements = function (acc, sort = false) {
   containerEvents.innerHTML = "";
 
-  account1.reminders.forEach(function (reminder, i) {
-    const displayDate = formatMovementDate(reminder.date, acc.locale);
+  acc.events.forEach(function (event) {
+    event.reminders.forEach(function (reminder) {
+      //const displayDate = formatMovementDate(reminder.date, acc.locale);
+      const [[type, nb]] = Object.entries(reminder.type);
 
-    const html = `
-      <div class="events__row">
-        <div class="events__type events__type--${reminder.type}">${reminder.type}</div>
-      <div class="events__date">${displayDate}</div>
-      <div class="events__description">${reminder.description}</div>
-      <div class="events__what">${reminder.what}</div>
-      </div>
-    `;
+      // TODO: store 'months' instead of months: 123, and just calculate an interval of time of months, on the fly!?
+      const html = `
+        <div class="events__row">
+          <div class="events__type events__type--${event.type}">${
+        event.type
+      }</div>
+        <div class="events__date">${reminder.date.toLocaleString(
+          DateTime.DATE_HUGE
+        )}</div>
+        <div class="events__description">${event.description}</div>
+        <div class="events__what">${nb} ${type}</div>
+        </div>
+      `;
 
-    containerEvents.insertAdjacentHTML("afterbegin", html);
+      containerEvents.insertAdjacentHTML("afterbegin", html);
+    });
   });
 };
 
@@ -141,6 +161,7 @@ const createCheesyEvent = function (data) {
   }
 
   reminders.sort((a, b) => (a.dt < b.dt ? -1 : 1));
+
   console.log(reminders);
 };
 
