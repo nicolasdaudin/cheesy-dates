@@ -23,25 +23,25 @@ const account1 = {
         },
       ],
     },
-  ],
-  reminders: [
-    {
-      type: "anniversary",
-      description: "Ensemble avec Jime",
-      date: "2021-12-14T21:31:17.178Z",
-      what: "123 mois",
-    },
     {
       type: "achievement",
       description: "Courir 2 fois par semaine",
-      date: "2022-01-01T10:17:24.185Z",
-      what: "50 jours",
+      reminders: [
+        {
+          date: DateTime.fromISO("2021-12-14T21:31:17.178Z"),
+          type: { days: 50 },
+        },
+      ],
     },
     {
       type: "birthday",
       description: "Anniversaire Amelia",
-      date: "2021-10-11T10:51:36.790Z",
-      what: "2 ans",
+      reminders: [
+        {
+          date: DateTime.fromISO("2021-10-11T10:51:36.790Z"),
+          type: { years: 2 },
+        },
+      ],
     },
   ],
 
@@ -85,6 +85,20 @@ const formatMovementDate = function (date, locale) {
 
 const displayMovements = function (acc, sort = false) {
   containerEvents.innerHTML = "";
+
+  // build objects with everything
+  const displayedEvents = [];
+  acc.events.forEach(function (event) {
+    event.reminders.forEach(function (reminder) {
+      displayedEvents.push({
+        type: event.type,
+        description: event.description,
+        date: reminder.date,
+        what: reminder.type,
+      });
+    });
+  });
+  console.log(displayedEvents);
 
   acc.events.forEach(function (event) {
     event.reminders.forEach(function (reminder) {
@@ -137,8 +151,8 @@ const createCheesyEvent = function (data) {
     const tempDate = temp.toLocaleString(DateTime.DATE_HUGE);
     console.log(`Celebrating ${i + 1} years or ${i + 1} years on ${tempDate}`);
     reminders.push({
-      dt: temp,
-      formatted: temp.toLocaleString(DateTime.DATE_HUGE),
+      date: temp,
+
       type: { years: i + 1 },
     });
     temp = temp.plus({ years: 1 });
@@ -153,16 +167,21 @@ const createCheesyEvent = function (data) {
     console.log(`Celebrating ${1000 * (i + 1)} days on ${tempDate}`);
 
     reminders.push({
-      dt: temp,
-      formatted: temp.toLocaleString(DateTime.DATE_HUGE),
+      date: temp,
       type: { days: 1000 * (i + 1) },
     });
     temp = temp.plus({ days: 1000 });
   }
 
   reminders.sort((a, b) => (a.dt < b.dt ? -1 : 1));
+  const event = {
+    type: "anniversary",
+    description: data.description,
+    reminders,
+  };
 
-  console.log(reminders);
+  account1.events.push(event);
+  updateUI(account1);
 };
 
 const init = function () {
