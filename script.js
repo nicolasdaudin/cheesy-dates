@@ -98,29 +98,28 @@ const displayMovements = function (acc, sort = false) {
       });
     });
   });
+  displayedEvents.sort((a, b) => (a.date < b.date ? -1 : 1));
+
   console.log(displayedEvents);
 
-  acc.events.forEach(function (event) {
-    event.reminders.forEach(function (reminder) {
-      //const displayDate = formatMovementDate(reminder.date, acc.locale);
-      const [[type, nb]] = Object.entries(reminder.type);
+  displayedEvents.map((event) => {
+    const [[type, nb]] = Object.entries(event.what);
 
-      // TODO: store 'months' instead of months: 123, and just calculate an interval of time of months, on the fly!?
-      const html = `
-        <div class="events__row">
-          <div class="events__type events__type--${event.type}">${
-        event.type
-      }</div>
-        <div class="events__date">${reminder.date.toLocaleString(
-          DateTime.DATE_HUGE
-        )}</div>
-        <div class="events__description">${event.description}</div>
-        <div class="events__what">${nb} ${type}</div>
-        </div>
-      `;
+    // TODO: store 'months' instead of months: 123, and just calculate an interval of time of months, on the fly!?
+    const html = `
+      <div class="events__row">
+        <div class="events__type events__type--${event.type}">${
+      event.type
+    }</div>
+      <div class="events__date">${event.date.toLocaleString(
+        DateTime.DATE_HUGE
+      )}</div>
+      <div class="events__description">${event.description}</div>
+      <div class="events__what">${nb} ${type}</div>
+      </div>
+    `;
 
-      containerEvents.insertAdjacentHTML("afterbegin", html);
-    });
+    containerEvents.insertAdjacentHTML("afterbegin", html);
   });
 };
 
