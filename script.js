@@ -19,7 +19,8 @@ const account1 = {
       reminders: [
         {
           date: DateTime.fromISO("2021-12-14T21:31:17.178Z"),
-          type: { months: 123 },
+          type: "months",
+          nb: 123,
         },
       ],
     },
@@ -29,7 +30,8 @@ const account1 = {
       reminders: [
         {
           date: DateTime.fromISO("2021-12-14T21:31:17.178Z"),
-          type: { days: 50 },
+          type: "days",
+          nb: 50,
         },
       ],
     },
@@ -39,7 +41,8 @@ const account1 = {
       reminders: [
         {
           date: DateTime.fromISO("2021-10-11T10:51:36.790Z"),
-          type: { years: 2 },
+          type: "years",
+          nb: 2,
         },
       ],
     },
@@ -67,6 +70,24 @@ const containerAddEventWindow = document.querySelector(".add-event-window");
 const btnCloseAddEventWindow = document.querySelector(".btn--close-modal");
 
 const formAddEvent = document.querySelector(".upload");
+
+const YEARS_LIMIT = 5;
+let eventType = "";
+
+// map of reminders to be calculated according to tupe of events
+const mapWhatReminders = new Map();
+mapWhatReminders.set("anniversary", [
+  { days: 500 },
+  { months: 5 },
+  { years: 1 },
+]);
+mapWhatReminders.set("birthday", [{ years: 1 }, { days: 1000 }]);
+mapWhatReminders.set("achievement", [
+  { days: 100 },
+  { years: 1 },
+  { months: 1 },
+]);
+
 /////////////////////////////////////////////////
 // Functions
 
@@ -92,10 +113,11 @@ const displayMovements = function (acc, sort = false) {
   acc.events.forEach(function (event) {
     event.reminders.forEach(function (reminder) {
       displayedEvents.push({
-        type: event.type,
+        eventType: event.type,
         description: event.description,
         date: reminder.date,
-        what: reminder.type,
+        reminderType: reminder.type,
+        nb: reminder.nb,
       });
     });
   });
@@ -104,19 +126,17 @@ const displayMovements = function (acc, sort = false) {
   console.log(displayedEvents);
 
   displayedEvents.map((event) => {
-    const [[type, nb]] = Object.entries(event.what);
-
     // TODO: store 'months' instead of months: 123, and just calculate an interval of time of months, on the fly!?
     const html = `
       <div class="events__row">
-        <div class="events__type events__type--${event.type}">${
-      event.type
+        <div class="events__type events__type--${event.eventType}">${
+      event.eventType
     }</div>
       <div class="events__date">${event.date.toLocaleString(
         DateTime.DATE_HUGE
       )}</div>
       <div class="events__description">${event.description}</div>
-      <div class="events__what">${nb} ${type}</div>
+      <div class="events__what">${event.nb} ${event.reminderType}</div>
       </div>
     `;
 
@@ -144,38 +164,41 @@ const createCheesyEvent = function (data) {
 
   const reminders = [];
 
-  // birthdays
-  console.log("------BIRTHDAYS");
-  let temp = dt.plus({ years: 1 });
-  for (let i = 0; temp.year < 2040; i++) {
-    const tempDate = temp.toLocaleString(DateTime.DATE_HUGE);
-    console.log(`Celebrating ${i + 1} years or ${i + 1} years on ${tempDate}`);
-    reminders.push({
-      date: temp,
+  const yearsLimit = DateTime.now().plus({ years: YEARS_LIMIT }).year;
 
-      type: { years: i + 1 },
-    });
-    temp = temp.plus({ years: 1 });
-  }
-  // console.log(reminders);
+  const whatReminders = mapWhatReminders.get(eventType);
+  console.log(whatReminders);
 
-  // days
-  console.log("------SPECIAL DAYS");
-  temp = dt.plus({ days: 1000 });
-  for (let i = 0; temp.year < 2040; i++) {
-    const tempDate = temp.toLocaleString(DateTime.DATE_HUGE);
-    console.log(`Celebrating ${1000 * (i + 1)} days on ${tempDate}`);
+  whatReminders.forEach(function (reminderType) {
+    let temp = dt.plus(reminderType);
+    const [[type, nb]] = Object.entries(reminderType);
+    for (let i = 0; temp.year < yearsLimit; i++) {
+      reminders.push({
+        date: temp,
+        type,
+        nb: nb * (i + 1),
+      });
+      temp = temp.plus(reminderType);
+    }
+  });
+  console.log(reminders);
 
-    reminders.push({
-      date: temp,
-      type: { days: 1000 * (i + 1) },
-    });
-    temp = temp.plus({ days: 1000 });
-  }
+  // // days
+  // temp = dt.plus({ days: 1000 });
+  // for (let i = 0; temp.year < yearsLimit; i++) {
+  //   const tempDate = temp.toLocaleString(DateTime.DATE_HUGE);
+  //   console.log(`Celebrating ${1000 * (i + 1)} days on ${tempDate}`);
+
+  //   reminders.push({
+  //     date: temp,
+  //     type: { days: 1000 * (i + 1) },
+  //   });
+  //   temp = temp.plus({ days: 1000 });
+  // }
 
   reminders.sort((a, b) => (a.dt < b.dt ? -1 : 1));
   const event = {
-    type: "anniversary",
+    type: eventType,
     description: data.description,
     reminders,
   };
@@ -206,7 +229,8 @@ const init = function () {
   // Attach buttons handler
   [btnAddEventAnniversary, btnAddEventBirthday, btnAddEventAchievement].forEach(
     (btn) => {
-      btn.addEventListener("click", function () {
+      btn.addEventListener("click", function (e) {
+        eventType = e.target.closest(".add-event").dataset.eventType;
         toggleAddEventWindow();
       });
     }
