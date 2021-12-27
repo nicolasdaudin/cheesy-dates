@@ -87,6 +87,7 @@ const displayMovements = function (acc, sort = false) {
   containerEvents.innerHTML = "";
 
   // build objects with everything
+  // TODO: refactor both these .forEach to use only array map-reduce-filter
   const displayedEvents = [];
   acc.events.forEach(function (event) {
     event.reminders.forEach(function (reminder) {
