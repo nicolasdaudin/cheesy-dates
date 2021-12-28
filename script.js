@@ -69,10 +69,31 @@ const containerOverLay = document.querySelector(".overlay");
 const containerAddEventWindow = document.querySelector(".add-event-window");
 const btnCloseAddEventWindow = document.querySelector(".btn--close-modal");
 
+const labelUploadHeading = document.querySelector(".upload-heading");
+const labelUploadSubheading = document.querySelector(".upload-subheading");
+const labelUploadEventType = document.querySelector(".upload-event__type");
 const formAddEvent = document.querySelector(".upload");
 
 const YEARS_LIMIT = 5;
 let eventType = "";
+
+// map of label headings
+const mapUploadHeadings = new Map();
+mapUploadHeadings.set("anniversary", {
+  heading: "Add an anniversary",
+  subheading: `It will be reminded every month, every 500 days...
+    <br>Examples: the day you met someone, the day you married, the day you started your first job`,
+});
+mapUploadHeadings.set("birthday", {
+  heading: "Add a birthday",
+  subheading: "It will be reminded every year",
+});
+mapUploadHeadings.set("achievement", {
+  heading: "Add an achievement",
+  subheading: `It will be reminded every year
+    <br>Examples: 
+    the day you stopped smoking, the day you started running every morning`,
+});
 
 // map of reminders to be calculated according to tupe of events
 const mapWhatReminders = new Map();
@@ -230,7 +251,22 @@ const init = function () {
   [btnAddEventAnniversary, btnAddEventBirthday, btnAddEventAchievement].forEach(
     (btn) => {
       btn.addEventListener("click", function (e) {
+        // when we click on one of the add event buttons
         eventType = e.target.closest(".add-event").dataset.eventType;
+        labelUploadHeading.textContent =
+          mapUploadHeadings.get(eventType).heading;
+        labelUploadSubheading.innerHTML =
+          mapUploadHeadings.get(eventType).subheading;
+
+        // clear first, then add the correct ones
+        labelUploadEventType.classList.remove(
+          "upload-event__type--anniversary",
+          "upload-event__type--birthday",
+          "upload-event__type--achievement"
+        );
+        labelUploadEventType.classList.add(`upload-event__type--${eventType}`);
+        labelUploadEventType.textContent = eventType;
+
         toggleAddEventWindow();
       });
     }
