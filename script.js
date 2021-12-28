@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
@@ -14,82 +14,82 @@ var Interval = luxon.Interval;
 const account1 = {
   events: [
     {
-      type: "anniversary",
-      description: "Ensemble avec Jime",
+      type: 'anniversary',
+      description: 'Ensemble avec Jime',
       reminders: [
         {
-          date: DateTime.fromISO("2021-12-14T21:31:17.178Z"),
-          type: "months",
+          date: DateTime.fromISO('2021-12-14T21:31:17.178Z'),
+          type: 'months',
           nb: 123,
         },
       ],
     },
     {
-      type: "achievement",
-      description: "Courir 2 fois par semaine",
+      type: 'achievement',
+      description: 'Courir 2 fois par semaine',
       reminders: [
         {
-          date: DateTime.fromISO("2021-12-14T21:31:17.178Z"),
-          type: "days",
+          date: DateTime.fromISO('2021-12-14T21:31:17.178Z'),
+          type: 'days',
           nb: 50,
         },
       ],
     },
     {
-      type: "birthday",
-      description: "Anniversaire Amelia",
+      type: 'birthday',
+      description: 'Anniversaire Amelia',
       reminders: [
         {
-          date: DateTime.fromISO("2021-10-11T10:51:36.790Z"),
-          type: "years",
+          date: DateTime.fromISO('2021-10-11T10:51:36.790Z'),
+          type: 'years',
           nb: 2,
         },
       ],
     },
   ],
 
-  locale: "es-ES", // de-DE
+  locale: 'es-ES', // de-DE
 };
 
 /////////////////////////////////////////////////
 // Elements
-const labelWelcome = document.querySelector(".welcome");
+const labelWelcome = document.querySelector('.welcome');
 
-const containerApp = document.querySelector(".app");
-const containerEvents = document.querySelector(".events");
+const containerApp = document.querySelector('.app');
+const containerEvents = document.querySelector('.events');
 
 const btnAddEventAnniversary = document.querySelector(
-  ".add-event--anniversary"
+  '.add-event--anniversary'
 );
-const btnAddEventBirthday = document.querySelector(".add-event--birthday");
+const btnAddEventBirthday = document.querySelector('.add-event--birthday');
 const btnAddEventAchievement = document.querySelector(
-  ".add-event--achievement"
+  '.add-event--achievement'
 );
-const containerOverLay = document.querySelector(".overlay");
-const containerAddEventWindow = document.querySelector(".add-event-window");
-const btnCloseAddEventWindow = document.querySelector(".btn--close-modal");
+const containerOverLay = document.querySelector('.overlay');
+const containerAddEventWindow = document.querySelector('.add-event-window');
+const btnCloseAddEventWindow = document.querySelector('.btn--close-modal');
 
-const labelUploadHeading = document.querySelector(".upload-heading");
-const labelUploadSubheading = document.querySelector(".upload-subheading");
-const labelUploadEventType = document.querySelector(".upload-event__type");
-const formAddEvent = document.querySelector(".upload");
+const labelUploadHeading = document.querySelector('.upload-heading');
+const labelUploadSubheading = document.querySelector('.upload-subheading');
+const labelUploadEventType = document.querySelector('.upload-event__type');
+const formAddEvent = document.querySelector('.upload');
 
 const YEARS_LIMIT = 5;
-let eventType = "";
+let eventType = '';
 
 // map of label headings
 const mapUploadHeadings = new Map();
-mapUploadHeadings.set("anniversary", {
-  heading: "Add an anniversary",
+mapUploadHeadings.set('anniversary', {
+  heading: 'Add an anniversary',
   subheading: `It will be reminded every month, every 500 days...
     <br>Examples: the day you met someone, the day you married, the day you started your first job`,
 });
-mapUploadHeadings.set("birthday", {
-  heading: "Add a birthday",
-  subheading: "It will be reminded every year",
+mapUploadHeadings.set('birthday', {
+  heading: 'Add a birthday',
+  subheading: 'It will be reminded every year',
 });
-mapUploadHeadings.set("achievement", {
-  heading: "Add an achievement",
+mapUploadHeadings.set('achievement', {
+  heading: 'Add an achievement',
   subheading: `It will be reminded every year
     <br>Examples: 
     the day you stopped smoking, the day you started running every morning`,
@@ -97,13 +97,13 @@ mapUploadHeadings.set("achievement", {
 
 // map of reminders to be calculated according to tupe of events
 const mapWhatReminders = new Map();
-mapWhatReminders.set("anniversary", [
+mapWhatReminders.set('anniversary', [
   { days: 500 },
   { months: 5 },
   { years: 1 },
 ]);
-mapWhatReminders.set("birthday", [{ years: 1 }, { days: 1000 }]);
-mapWhatReminders.set("achievement", [
+mapWhatReminders.set('birthday', [{ years: 1 }, { days: 1000 }]);
+mapWhatReminders.set('achievement', [
   { days: 100 },
   { years: 1 },
   { months: 1 },
@@ -118,15 +118,15 @@ const formatMovementDate = function (date, locale) {
   const daysPassed = (date1, date2) =>
     Math.round(Math.abs(date2 - date1) / (1000 * 24 * 60 * 60));
   const fromToday = daysPassed(newdate, new Date());
-  if (fromToday === 0) return "Today";
-  if (fromToday === 1) return "Yesterday";
+  if (fromToday === 0) return 'Today';
+  if (fromToday === 1) return 'Yesterday';
   if (fromToday <= 7) return `${fromToday} days ago`;
 
   return new Intl.DateTimeFormat(locale).format(newdate);
 };
 
 const displayMovements = function (acc, sort = false) {
-  containerEvents.innerHTML = "";
+  containerEvents.innerHTML = '';
 
   // build objects with everything
   // TODO: refactor both these .forEach to use only array map-reduce-filter
@@ -161,7 +161,7 @@ const displayMovements = function (acc, sort = false) {
       </div>
     `;
 
-    containerEvents.insertAdjacentHTML("afterbegin", html);
+    containerEvents.insertAdjacentHTML('afterbegin', html);
   });
 };
 
@@ -171,8 +171,8 @@ const updateUI = function (acc) {
 };
 
 const toggleAddEventWindow = function () {
-  containerOverLay.classList.toggle("hidden");
-  containerAddEventWindow.classList.toggle("hidden");
+  containerOverLay.classList.toggle('hidden');
+  containerAddEventWindow.classList.toggle('hidden');
 };
 
 const createCheesyEvent = function (data) {
@@ -236,11 +236,11 @@ const init = function () {
   // Create current date and time
   const now = new Date();
   const options = {
-    hour: "numeric",
-    minute: "numeric",
-    day: "numeric",
-    month: "numeric",
-    year: "numeric",
+    hour: 'numeric',
+    minute: 'numeric',
+    day: 'numeric',
+    month: 'numeric',
+    year: 'numeric',
     //weekday: 'long',
   };
 
@@ -250,9 +250,9 @@ const init = function () {
   // Attach buttons handler
   [btnAddEventAnniversary, btnAddEventBirthday, btnAddEventAchievement].forEach(
     (btn) => {
-      btn.addEventListener("click", function (e) {
+      btn.addEventListener('click', function (e) {
         // when we click on one of the add event buttons
-        eventType = e.target.closest(".add-event").dataset.eventType;
+        eventType = e.target.closest('.add-event').dataset.eventType;
         labelUploadHeading.textContent =
           mapUploadHeadings.get(eventType).heading;
         labelUploadSubheading.innerHTML =
@@ -260,9 +260,9 @@ const init = function () {
 
         // clear first, then add the correct ones
         labelUploadEventType.classList.remove(
-          "upload-event__type--anniversary",
-          "upload-event__type--birthday",
-          "upload-event__type--achievement"
+          'upload-event__type--anniversary',
+          'upload-event__type--birthday',
+          'upload-event__type--achievement'
         );
         labelUploadEventType.classList.add(`upload-event__type--${eventType}`);
         labelUploadEventType.textContent = eventType;
@@ -271,14 +271,14 @@ const init = function () {
       });
     }
   );
-  btnCloseAddEventWindow.addEventListener("click", function () {
+  btnCloseAddEventWindow.addEventListener('click', function () {
     toggleAddEventWindow();
   });
-  containerOverLay.addEventListener("click", function () {
+  containerOverLay.addEventListener('click', function () {
     toggleAddEventWindow();
   });
 
-  formAddEvent.addEventListener("submit", function (e) {
+  formAddEvent.addEventListener('submit', function (e) {
     e.preventDefault();
 
     // retrieve form inputs
