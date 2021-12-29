@@ -133,18 +133,19 @@ const displayMovements = function (acc, sort = false) {
   const displayedEvents = [];
   acc.events?.forEach(function (event) {
     event.reminders.forEach(function (reminder) {
-      displayedEvents.push({
-        eventType: event.type,
-        description: event.description,
-        date: reminder.date,
-        reminderType: reminder.type,
-        nb: reminder.nb,
-      });
+      // we display the reminder only if its date is in the future
+      if (DateTime.fromISO(reminder.date) > DateTime.now()) {
+        displayedEvents.push({
+          eventType: event.type,
+          description: event.description,
+          date: reminder.date,
+          reminderType: reminder.type,
+          nb: reminder.nb,
+        });
+      }
     });
   });
   displayedEvents.sort((a, b) => (a.date < b.date ? -1 : 1));
-
-  console.log(displayedEvents);
 
   displayedEvents.map((event) => {
     // TODO: store 'months' instead of months: 123, and just calculate an interval of time of months, on the fly!?
@@ -194,11 +195,14 @@ const createCheesyEvent = function (data) {
     let temp = dt.plus(reminderType);
     const [[type, nb]] = Object.entries(reminderType);
     for (let i = 0; temp.year < yearsLimit; i++) {
-      reminders.push({
-        date: temp.toISO(),
-        type,
-        nb: nb * (i + 1),
-      });
+      // we only add the reminder if its date is after the current date
+      if (temp > DateTime.now()) {
+        reminders.push({
+          date: temp.toISO(),
+          type,
+          nb: nb * (i + 1),
+        });
+      }
       temp = temp.plus(reminderType);
     }
   });
