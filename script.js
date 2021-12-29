@@ -112,17 +112,17 @@ mapWhatReminders.set('achievement', [
 /////////////////////////////////////////////////
 // Functions
 
-const formatMovementDate = function (date, locale) {
-  const newdate = new Date(date);
+const saveData = function () {
+  localStorage.setItem('events', JSON.stringify(account1.events));
+};
 
-  const daysPassed = (date1, date2) =>
-    Math.round(Math.abs(date2 - date1) / (1000 * 24 * 60 * 60));
-  const fromToday = daysPassed(newdate, new Date());
-  if (fromToday === 0) return 'Today';
-  if (fromToday === 1) return 'Yesterday';
-  if (fromToday <= 7) return `${fromToday} days ago`;
+const loadData = function () {
+  const storedEvents = JSON.parse(localStorage.getItem('events'));
+  account1.events = storedEvents || [];
+};
 
-  return new Intl.DateTimeFormat(locale).format(newdate);
+const reset = function () {
+  localStorage.removeItem('events');
 };
 
 const displayMovements = function (acc, sort = false) {
@@ -131,7 +131,7 @@ const displayMovements = function (acc, sort = false) {
   // build objects with everything
   // TODO: refactor both these .forEach to use only array map-reduce-filter
   const displayedEvents = [];
-  acc.events.forEach(function (event) {
+  acc.events?.forEach(function (event) {
     event.reminders.forEach(function (reminder) {
       displayedEvents.push({
         eventType: event.type,
@@ -153,7 +153,7 @@ const displayMovements = function (acc, sort = false) {
         <div class="events__type events__type--${event.eventType}">${
       event.eventType
     }</div>
-      <div class="events__date">${event.date.toLocaleString(
+      <div class="events__date">${DateTime.fromISO(event.date).toLocaleString(
         DateTime.DATE_HUGE
       )}</div>
       <div class="events__description">${event.description}</div>
@@ -195,7 +195,7 @@ const createCheesyEvent = function (data) {
     const [[type, nb]] = Object.entries(reminderType);
     for (let i = 0; temp.year < yearsLimit; i++) {
       reminders.push({
-        date: temp,
+        date: temp.toISO(),
         type,
         nb: nb * (i + 1),
       });
@@ -225,6 +225,7 @@ const createCheesyEvent = function (data) {
   };
 
   account1.events.push(event);
+  saveData();
   updateUI(account1);
 };
 
@@ -233,16 +234,7 @@ const init = function () {
 
   containerApp.style.opacity = 100;
 
-  // Create current date and time
-  const now = new Date();
-  const options = {
-    hour: 'numeric',
-    minute: 'numeric',
-    day: 'numeric',
-    month: 'numeric',
-    year: 'numeric',
-    //weekday: 'long',
-  };
+  loadData();
 
   // Update UI
   updateUI(currentAccount);
