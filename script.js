@@ -1,5 +1,4 @@
 'use strict';
-
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // BANKIST APP
@@ -8,8 +7,15 @@
 // Data
 
 // DIFFERENT DATA! Contains movement dates, currency and locale
-var DateTime = luxon.DateTime;
-var Interval = luxon.Interval;
+
+// import { DateTime } from './node_modules/luxon/src/luxon.js';
+import { DateTime } from 'luxon';
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
+
+if (module.hot) {
+  module.hot.accept();
+}
 
 const account1 = {
   events: [
@@ -85,7 +91,7 @@ mapUploadHeadings.set('anniversary', {
     <br>Examples: the day you met someone, the day you married, the day you started your first job`,
 });
 mapUploadHeadings.set('birthday', {
-  heading: 'Add a birthday',
+  heading: 'Add a birthday YEAH',
   subheading: 'It will be reminded every year',
 });
 mapUploadHeadings.set('achievement', {
