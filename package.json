@@ -1,7 +1,7 @@
 {
   "name": "cheesy-dates",
   "browserslist": "> 0.25%, not dead",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Cheesy Dates - get reminders about important dates",
   "scripts": {
     "start": "parcel index.html",

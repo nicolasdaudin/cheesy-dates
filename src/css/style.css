@@ -16,7 +16,7 @@ html {
 }
 
 body {
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   color: #444;
   background-color: #f3f3f3;
   height: 100vh;
@@ -305,4 +305,19 @@ h2 {
 
 .upload-event__type--anniversary {
   background-image: linear-gradient(to top left, #ffb003, #ffcb03);
+}
+
+.error {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 5rem 4rem;
+
+  display: flex;
+}
+
+.error p {
+  margin-left: 1.5rem;
+  font-size: 1.8rem;
+  line-height: 1.5;
+  font-weight: 600;
 }
