@@ -90,7 +90,7 @@ nav {
   margin: 4rem auto;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: 8rem 60rem;
+  grid-template-rows: 8rem 5rem 60rem;
   gap: 2rem;
 
   /* NOTE This creates the fade in/out anumation */

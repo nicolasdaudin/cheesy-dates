@@ -32,6 +32,11 @@ const controlPrepareAddEventView = function (eventType) {
   addEventView.render({ ...UPLOAD_WINDOW_HEADINGS.get(eventType), eventType });
 };
 
+const controlClearEvents = function () {
+  model.clearData();
+  eventsView.render(model.state.events);
+};
+
 const init = function () {
   const containerApp = document.querySelector('.app');
   containerApp.style.opacity = 100;
@@ -41,5 +46,7 @@ const init = function () {
 
   addEventView.addHandlerShowWindow(controlPrepareAddEventView);
   addEventView.addHandlerUpload(controlCreateEvent);
+
+  eventsView.addHandlerClearEvents(controlClearEvents);
 };
 init();

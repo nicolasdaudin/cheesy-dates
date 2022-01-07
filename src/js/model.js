@@ -49,6 +49,11 @@ export const createEvent = function (data) {
   saveData();
 };
 
+export const clearData = function () {
+  localStorage.removeItem('events');
+  state.events = [];
+};
+
 export const saveData = function () {
   localStorage.setItem('events', JSON.stringify(state.events));
 };

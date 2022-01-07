@@ -6,8 +6,14 @@ class EventsView {
 
   _data;
 
+  _btnClearEvents = document.querySelector('.options-clear-events');
+
   _clear() {
     this._parentElement.innerHTML = '';
+  }
+
+  addHandlerClearEvents(handler) {
+    this._btnClearEvents.addEventListener('click', handler);
   }
 
   render(data) {
