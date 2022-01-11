@@ -42,9 +42,20 @@
       </div>
 
       <!-- EVENTS -->
-      <p class="options-events">
-        <button class="options-clear-events">Clear all events</button>
-      </p>
+      <div class="options-buttons">
+        <button class="btn options-clear-events">Clear all events</button>
+        <button class="btn btn-google options-auth-google-calendar">
+          Authorize Google
+        </button>
+        <button class="btn btn-google options-signout-google-calendar hidden">
+          Sign out Google
+        </button>
+        <button class="btn btn-google options-create-dummy-event">
+          Create Dummy Event
+        </button>
+        <p class="status-message hidden"></p>
+      </div>
+
       <div class="events">
         <div class="events__row">
           <div class="events__type events__type--deposit">2 deposit</div>
@@ -94,6 +105,7 @@
       <a href="https://twitter.com/jonasschmedtman">Jonas Schmedtmann</a>.
     </footer>
 
+    <script src="https://apis.google.com/js/api.js"></script>
     <script type="module" src="src/js/controller.js"></script>
   </body>
 </html>

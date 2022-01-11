@@ -321,3 +321,11 @@ h2 {
   line-height: 1.5;
   font-weight: 600;
 }
+
+.options-buttons {
+  grid-column: span 3;
+}
+
+.status-message {
+  font-size: 1.4rem;
+}
