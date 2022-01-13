@@ -1,5 +1,8 @@
 export const YEARS_LIMIT = 5;
 
+export const GOOGLE_CALENDAR_NAME = 'CHEESY DATES';
+export const GOOGLE_MAX_CALENDAR_EVENTS = 10;
+
 // map of label headings
 export const UPLOAD_WINDOW_HEADINGS = new Map();
 UPLOAD_WINDOW_HEADINGS.set('anniversary', {

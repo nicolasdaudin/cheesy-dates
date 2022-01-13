@@ -6,8 +6,6 @@ import eventsView from './views/eventsView.js';
 
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
-import { RRule } from 'rrule';
-import { DateTime } from 'luxon';
 
 import { UPLOAD_WINDOW_HEADINGS } from './config.js';
 
@@ -23,15 +21,35 @@ if (module.hot) {
   module.hot.accept();
 }
 
-const controlCreateEvent = function (data) {
+const controlCreateEvent = async function (data) {
   console.log('controlCreateEvent');
 
-  model.createEvent(data);
+  try {
+    // mainView.renderMessage('⏳ Finding the right Google Calendar');
 
-  eventsView.render(model.state.events);
+    // TODO: add a spinner in addEventView.js until we close the window ...
+    // or do the calendar operations after closing the window, and show a spinner in the main view?
 
-  addEventView.toggleWindow();
-  addEventView.clearForm();
+    // if app not connected to any calendar, we first try to find the corresponding calendar in Google
+    if (!model.state.calendarId) await model.findCalendar();
+
+    // if app not connected and we can't find any calendar, we create a new calendar in Google
+    if (!model.state.calendarId) await model.createCalendar();
+
+    // mainView.renderMessage(
+    //   `📅 Connected to Google Calendar CHEESY DATES with id ${model.state.calendarId}`
+    // );
+
+    model.createEvent(data);
+
+    eventsView.render(model.state.events);
+
+    addEventView.toggleWindow();
+    addEventView.clearForm();
+  } catch (err) {
+    console.error(err);
+    mainView.renderError(err.message);
+  }
 };
 
 const controlPrepareAddEventView = function (eventType) {
@@ -63,95 +81,24 @@ const listUpcomingEvents = function () {
     });
 };
 
-const createDummyEvent = async function () {
-  console.log('####### createDummyEvent');
+// const createDummyEvent = async function () {
+//   console.log('####### createDummyEvent');
 
-  mainView.renderMessage('⏳ Connecting to CHEESY DATES calendar 📅 ...');
+//   // first, find a 'Cheesy-Dates' calendar
+//   try {
+//     mainView.renderMessage('⏳ Creating Dummy Event 🗓 ...');
 
-  // first, find a 'Cheesy-Dates' calendar
-  try {
-    const calendarListData = await gapi.client.calendar.calendarList.list();
-    const calendarList = calendarListData.result.items;
-    console.log(calendarList);
-    let cheesyDatesCalendar = calendarList.find(
-      (cal) => cal.summary === 'CHEESY DATES'
-    );
-    // console.log(cheesyDatesCalendar);
-    if (!cheesyDatesCalendar) {
-      const newCalendarData = await gapi.client.calendar.calendars.insert({
-        summary: 'CHEESY DATES',
-      });
-      // console.log(newCalendarData);
+//     // mainView.renderMessage('🎉 Dummy event created');
+//     await model.createGoogleDummyEvent();
 
-      const insertedCalendarData =
-        await gapi.client.calendar.calendarList.insert({
-          id: newCalendarData.result.id,
-        });
-      cheesyDatesCalendar = insertedCalendarData.result;
-    }
-    console.log(cheesyDatesCalendar);
+//     mainView.renderMessage('⏳ Creating Dummy RECURRING Event 🤪 ...');
 
-    mainView.renderMessage('⏳ Creating Dummy Event 🗓 ...');
-
-    // mainView.renderMessage('🎉 Dummy event created');
-    const newDummyEvent = {
-      summary: 'dummy event title',
-      start: {
-        dateTime: '2022-01-11T11:00:00',
-        timeZone: 'Europe/Madrid',
-      },
-      end: {
-        dateTime: '2022-01-11T17:00:00',
-        timeZone: 'Europe/Madrid',
-      },
-    };
-    const insertedDummyEventData = await gapi.client.calendar.events.insert({
-      calendarId: cheesyDatesCalendar.id,
-      ...newDummyEvent,
-    });
-    console.log('Inserted Dummy Event', insertedDummyEventData.result);
-
-    mainView.renderMessage('⏳ Creating Dummy RECURRING Event 🤪 ...');
-
-    const dummyRRule = new RRule({
-      freq: RRule.DAILY,
-      dtstart: new Date(Date.UTC(2022, 0, 13, 0, 0, 0)),
-      count: 10,
-      interval: 2,
-    });
-    console.log(dummyRRule.all());
-    dummyRRule.all().forEach((dummyDate, i) => {
-      const celebrated = dummyRRule.options.interval * i + ' days';
-      const date = DateTime.fromJSDate(dummyDate).toISODate();
-      console.log(dummyDate, date, celebrated);
-      const newDummyRecurringEvent = {
-        summary: `${celebrated} since Jime and Nico are together`,
-        description: `%%${dummyRRule.toString()}%%`,
-        start: {
-          date,
-        },
-        end: {
-          date,
-        },
-      };
-
-      const insertedDummyRecurringEventData = gapi.client.calendar.events
-        .insert({
-          calendarId: cheesyDatesCalendar.id,
-          ...newDummyRecurringEvent,
-        })
-        .then(() => {
-          console.log(
-            'Inserted Dummy Recurring Event',
-            insertedDummyRecurringEventData.result
-          );
-        });
-    });
-  } catch (err) {
-    console.error(err);
-    mainView.renderError(err.message);
-  }
-};
+//     await model.createGoogleRecurringDummyEvents();
+//   } catch (err) {
+//     console.error(err);
+//     mainView.renderError(err.message);
+//   }
+// };
 
 const getCalendarList = function () {
   console.log('getCalendarList');
@@ -188,10 +135,11 @@ const init = function () {
 
   eventsView.addHandlerClearEvents(controlClearEvents);
 
+  // mainView.renderMessage('⏳ Authorizing access to Google Calendar');
   mainView.addHandlerAuthorizeGoogle(authorizeGoogle);
   mainView.addHandlerSignoutGoogle(signoutGoogle);
   gapi.load('client:auth2', initAuthorizeGoogle);
 
-  _btnCreateDummyEvent.addEventListener('click', createDummyEvent);
+  // _btnCreateDummyEvent.addEventListener('click', createDummyEvent);
 };
 init();
