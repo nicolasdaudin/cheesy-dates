@@ -7,6 +7,7 @@ import eventsView from './views/eventsView.js';
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import { RRule } from 'rrule';
+import { DateTime } from 'luxon';
 
 import { UPLOAD_WINDOW_HEADINGS } from './config.js';
 
@@ -114,37 +115,38 @@ const createDummyEvent = async function () {
 
     const dummyRRule = new RRule({
       freq: RRule.DAILY,
-      dtstart: new Date(Date.UTC(2022, 0, 12, 0, 0, 0)),
+      dtstart: new Date(Date.UTC(2022, 0, 13, 0, 0, 0)),
       count: 10,
       interval: 2,
     });
-    const dummyRRuleString = RRule.optionsToString({
-      freq: dummyRRule.options.freq,
-      count: dummyRRule.options.count,
-      interval: dummyRRule.options.interval,
+    console.log(dummyRRule.all());
+    dummyRRule.all().forEach((dummyDate, i) => {
+      const celebrated = dummyRRule.options.interval * i + ' days';
+      const date = DateTime.fromJSDate(dummyDate).toISODate();
+      console.log(dummyDate, date, celebrated);
+      const newDummyRecurringEvent = {
+        summary: `${celebrated} since Jime and Nico are together`,
+        description: `%%${dummyRRule.toString()}%%`,
+        start: {
+          date,
+        },
+        end: {
+          date,
+        },
+      };
+
+      const insertedDummyRecurringEventData = gapi.client.calendar.events
+        .insert({
+          calendarId: cheesyDatesCalendar.id,
+          ...newDummyRecurringEvent,
+        })
+        .then(() => {
+          console.log(
+            'Inserted Dummy Recurring Event',
+            insertedDummyRecurringEventData.result
+          );
+        });
     });
-    console.log(dummyRRuleString);
-
-    const newDummyRecurringEvent = {
-      summary: 'dummy recurring event title',
-      start: {
-        date: '2022-01-12',
-      },
-      end: {
-        date: '2022-01-12',
-      },
-      recurrence: [dummyRRuleString],
-    };
-
-    const insertedDummyRecurringEventData =
-      await gapi.client.calendar.events.insert({
-        calendarId: cheesyDatesCalendar.id,
-        ...newDummyRecurringEvent,
-      });
-    console.log(
-      'Inserted Dummy Recurring Event',
-      insertedDummyRecurringEventData.result
-    );
   } catch (err) {
     console.error(err);
     mainView.renderError(err.message);
