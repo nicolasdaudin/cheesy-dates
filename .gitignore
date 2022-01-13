@@ -4,3 +4,4 @@ dist
 .vscode
 .DS_Store
 .prettierrc
+src/js/credentials.js
