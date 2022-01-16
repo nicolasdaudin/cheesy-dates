@@ -108,7 +108,7 @@ export const createEvent = function (data) {
   state.events.push(event);
   saveData();
 
-  createEventInGoogle(event);
+  return event;
 };
 
 /**
@@ -116,8 +116,10 @@ export const createEvent = function (data) {
  * Only creates the first GOOGLE_MAX_CALENDAR_EVENTS events (default 10)
  * @param {*} event
  */
-const createEventInGoogle = async function (event) {
-  event.reminders.slice(0, GOOGLE_MAX_CALENDAR_EVENTS).forEach((reminder) => {
+export const createEventInGoogle = async function (event) {
+  const reminders = event.reminders.slice(0, GOOGLE_MAX_CALENDAR_EVENTS);
+
+  for (const reminder of reminders) {
     const googleEvent = {
       summary: `${reminder.nb} ${reminder.type} - ${event.description}`,
       description: `%%%%`, // probably use the RRule again here. to be used to track back from the app the events created
@@ -129,17 +131,14 @@ const createEventInGoogle = async function (event) {
       },
     };
 
-    gapi.client.calendar.events
-      .insert({
-        calendarId: state.calendarId,
-        ...googleEvent,
-      })
-      .then((data) => {
-        console.log('Event inserted in Google Calendar', data.result);
-      });
+    const data = await gapi.client.calendar.events.insert({
+      calendarId: state.calendarId,
+      ...googleEvent,
+    });
+    console.log('Event inserted in Google Calendar', data.result);
 
-    console.log(googleEvent);
-  });
+    // console.log(googleEvent);
+  }
 };
 
 export const createGoogleRecurringDummyEvents = async function () {

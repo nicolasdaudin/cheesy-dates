@@ -20,17 +20,15 @@ class MainView {
   renderMessage(message) {
     this._containerStatusMessage.classList.remove('hidden');
     this._containerStatusMessage.innerHTML = message;
-    // setTimeout(() => {
-    //   this._containerStatusMessage.classList.toggle('hidden');
-    // }, 2000);
+  }
+
+  toggleMessage() {
+    this._containerStatusMessage.classList.toggle('hidden');
   }
 
   renderError(message) {
     this._containerStatusMessage.classList.remove('hidden');
     this._containerStatusMessage.innerHTML = `🛑 ${message}`;
-    // setTimeout(() => {
-    //   this._containerStatusMessage.classList.toggle('hidden');
-    // }, 2000);
   }
 }
 export default new MainView();

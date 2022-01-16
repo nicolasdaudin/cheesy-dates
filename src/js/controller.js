@@ -25,7 +25,15 @@ const controlCreateEvent = async function (data) {
   console.log('controlCreateEvent');
 
   try {
-    // mainView.renderMessage('⏳ Finding the right Google Calendar');
+    mainView.renderMessage('⏳ Create the event in Cheesy Dates app ....');
+
+    const event = model.createEvent(data);
+    eventsView.render(model.state.events);
+
+    addEventView.toggleWindow();
+    addEventView.clearForm();
+
+    mainView.renderMessage('⏳ Finding the right Google Calendar ...');
 
     // TODO: add a spinner in addEventView.js until we close the window ...
     // or do the calendar operations after closing the window, and show a spinner in the main view?
@@ -36,16 +44,17 @@ const controlCreateEvent = async function (data) {
     // if app not connected and we can't find any calendar, we create a new calendar in Google
     if (!model.state.calendarId) await model.createCalendar();
 
-    // mainView.renderMessage(
-    //   `📅 Connected to Google Calendar CHEESY DATES with id ${model.state.calendarId}`
-    // );
+    mainView.renderMessage(`⏳ Creating the events in Google Calendar !!!`);
+    console.log(`⏳ Creating the events in Google Calendar !!!`);
+    // now create in Google
+    await model.createEventInGoogle(event);
+    mainView.renderMessage(`📅 Events created in Google Calendar !!! `);
+    console.log(`📅 Events created in Google Calendar !!! `);
 
-    model.createEvent(data);
-
-    eventsView.render(model.state.events);
-
-    addEventView.toggleWindow();
-    addEventView.clearForm();
+    // close form window
+    setTimeout(function () {
+      mainView.toggleMessage();
+    }, 2500);
   } catch (err) {
     console.error(err);
     mainView.renderError(err.message);
