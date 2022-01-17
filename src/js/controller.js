@@ -14,9 +14,6 @@ import mainView from './views/mainView.js';
 
 import { initGoogle, authorizeGoogle, signoutGoogle } from './helper.js';
 
-const _btnCreateDummyEvent = document.querySelector(
-  '.options-create-dummy-event'
-);
 if (module.hot) {
   module.hot.accept();
 }

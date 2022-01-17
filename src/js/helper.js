@@ -1,4 +1,5 @@
-import { API_KEY, CLIENT_ID, DISCOVERY_DOCS, SCOPES } from './credentials.js';
+// import { API_KEY, CLIENT_ID } from './credentials.js';
+import { GOOGLE_DISCOVERY_DOCS, GOOGLE_SCOPES } from './config.js';
 
 /**
  * Authorize the connection to Google API
@@ -6,12 +7,13 @@ import { API_KEY, CLIENT_ID, DISCOVERY_DOCS, SCOPES } from './credentials.js';
  *
  */
 export const initGoogle = function (controlSigninStatus) {
+  console.log(process.env.API_KEY, process.env.CLIENT_ID);
   gapi.client
     .init({
-      apiKey: API_KEY,
-      clientId: CLIENT_ID,
-      discoveryDocs: DISCOVERY_DOCS,
-      scope: SCOPES,
+      apiKey: process.env.API_KEY,
+      clientId: process.env.CLIENT_ID,
+      discoveryDocs: GOOGLE_DISCOVERY_DOCS,
+      scope: GOOGLE_SCOPES,
     })
     .then(
       function () {

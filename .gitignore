@@ -5,3 +5,4 @@ dist
 .DS_Store
 .prettierrc
 src/js/credentials.js
+.env

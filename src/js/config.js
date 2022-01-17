@@ -3,6 +3,15 @@ export const YEARS_LIMIT = 5;
 export const GOOGLE_CALENDAR_NAME = 'CHEESY DATES';
 export const GOOGLE_MAX_CALENDAR_EVENTS = 10;
 
+// Array of API discovery doc URLs for APIs used by the quickstart
+export const GOOGLE_DISCOVERY_DOCS = [
+  'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest',
+];
+
+// Authorization scopes required by the API; multiple scopes can be
+// included, separated by spaces.
+export const GOOGLE_SCOPES = 'https://www.googleapis.com/auth/calendar';
+
 // map of label headings
 export const UPLOAD_WINDOW_HEADINGS = new Map();
 UPLOAD_WINDOW_HEADINGS.set('anniversary', {
