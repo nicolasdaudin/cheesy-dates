@@ -4,7 +4,7 @@
   "version": "1.3.0",
   "description": "Cheesy Dates - get reminders about important dates",
   "scripts": {
-    "start": "NODE_ENV=development parcel index.html",
+    "start": "parcel index.html",
     "build": "parcel build index.html"
   },
   "repository": {

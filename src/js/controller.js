@@ -115,13 +115,14 @@ const getCalendarList = function () {
 };
 
 const controlUpdateSigninStatus = function (isSignedIn) {
+  console.log('Changes in signin status - called controlUpdateSigninStatus');
   if (isSignedIn) {
-    mainView.toggleGoogleButtons();
-    console.log('✅ SIGNED IN !!!!!');
+    mainView.showSignoutGoogleButton();
+    console.log('✅ Connected to Google Calendar...');
     // getCalendarList();
   } else {
-    mainView.toggleGoogleButtons();
-    console.log('🤨 NOT SIGNED IN ....');
+    mainView.showAuthorizeGoogleButton();
+    console.log('🤨 Disconnected from Google Calendar...');
   }
 };
 

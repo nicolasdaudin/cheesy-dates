@@ -5,10 +5,15 @@ class MainView {
   );
   _containerStatusMessage = document.querySelector('.status-message');
 
-  toggleGoogleButtons() {
-    this._btnAuthorizeGoogle.classList.toggle('hidden');
-    this._btnSignoutGoogle.classList.toggle('hidden');
+  showAuthorizeGoogleButton() {
+    this._btnAuthorizeGoogle.classList.remove('hidden');
+    this._btnSignoutGoogle.classList.add('hidden');
   }
+  showSignoutGoogleButton() {
+    this._btnAuthorizeGoogle.classList.add('hidden');
+    this._btnSignoutGoogle.classList.remove('hidden');
+  }
+
   addHandlerAuthorizeGoogle(handler) {
     this._btnAuthorizeGoogle.addEventListener('click', handler);
   }

@@ -7,7 +7,6 @@ import { GOOGLE_DISCOVERY_DOCS, GOOGLE_SCOPES } from './config.js';
  *
  */
 export const initGoogle = function (controlSigninStatus) {
-  console.log(process.env.API_KEY, process.env.CLIENT_ID);
   gapi.client
     .init({
       apiKey: process.env.API_KEY,
@@ -30,9 +29,11 @@ export const initGoogle = function (controlSigninStatus) {
 };
 
 export const authorizeGoogle = function () {
+  console.log('Trying to log in');
   gapi.auth2.getAuthInstance().signIn();
 };
 
 export const signoutGoogle = function () {
+  console.log('Trying to log out');
   gapi.auth2.getAuthInstance().signOut();
 };
