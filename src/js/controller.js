@@ -7,12 +7,17 @@ import eventsView from './views/eventsView.js';
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
-import { UPLOAD_WINDOW_HEADINGS } from './config.js';
+import { UPLOAD_WINDOW_HEADINGS, GOOGLE_SCOPES } from './config.js';
 
 import eventsView from './views/eventsView.js';
 import mainView from './views/mainView.js';
 
-import { initGoogle, authorizeGoogle, signoutGoogle } from './helper.js';
+import {
+  GoogleAuth,
+  initGoogle,
+  handleSignInSignOutGoogle,
+  revokeAccessGoogle,
+} from './googleHelper.js';
 
 if (module.hot) {
   module.hot.accept();
@@ -48,13 +53,20 @@ const controlCreateEvent = async function (data) {
     mainView.renderMessage(`📅 Events created in Google Calendar !!! `);
     console.log(`📅 Events created in Google Calendar !!! `);
 
-    // close form window
     setTimeout(function () {
       mainView.toggleMessage();
     }, 2500);
   } catch (err) {
     console.error(err);
-    mainView.renderError(err.message);
+    if (err.status === 401) {
+      mainView.renderError(
+        'You must signin to Google Calendar if you also want to create the events in Google'
+      );
+    } else {
+      mainView.renderError(
+        'Problem while creating events on Google Calendar. See logs.'
+      );
+    }
   }
 };
 
@@ -70,60 +82,25 @@ const controlClearEvents = function () {
   eventsView.render(model.state.events);
 };
 
-const listUpcomingEvents = function () {
-  console.log('listUpcomingEvents');
-  gapi.client.calendar.events
-    .list({
-      calendarId: 'primary',
-      timeMin: new Date().toISOString(),
-      showDeleted: false,
-      singleEvents: true,
-      maxResults: 10,
-      orderBy: 'startTime',
-    })
-    .then(function (response) {
-      var events = response.result.items;
-      console.log(events);
-    });
-};
+const controlUpdateSigninStatus = function () {
+  const user = GoogleAuth.currentUser.get();
+  const isAuthorized = user.hasGrantedScopes(GOOGLE_SCOPES);
 
-// const createDummyEvent = async function () {
-//   console.log('####### createDummyEvent');
-
-//   // first, find a 'Cheesy-Dates' calendar
-//   try {
-//     mainView.renderMessage('⏳ Creating Dummy Event 🗓 ...');
-
-//     // mainView.renderMessage('🎉 Dummy event created');
-//     await model.createGoogleDummyEvent();
-
-//     mainView.renderMessage('⏳ Creating Dummy RECURRING Event 🤪 ...');
-
-//     await model.createGoogleRecurringDummyEvents();
-//   } catch (err) {
-//     console.error(err);
-//     mainView.renderError(err.message);
-//   }
-// };
-
-const getCalendarList = function () {
-  console.log('getCalendarList');
-  gapi.client.calendar.calendarList.list().then(function (response) {
-    var calendars = response.result.items;
-    console.log(calendars);
-  });
-};
-
-const controlUpdateSigninStatus = function (isSignedIn) {
-  console.log('Changes in signin status - called controlUpdateSigninStatus');
-  if (isSignedIn) {
-    mainView.showSignoutGoogleButton();
-    console.log('✅ Connected to Google Calendar...');
-    // getCalendarList();
+  if (isAuthorized) {
+    mainView.showGoogleAuthorizedButtons();
+    mainView.renderMessage(
+      'You are currently signed in and have granted access to this app'
+    );
   } else {
-    mainView.showAuthorizeGoogleButton();
-    console.log('🤨 Disconnected from Google Calendar...');
+    mainView.showGoogleNotAuthorizedButtons();
+    mainView.renderMessage(
+      'You are either not authorized to use this app or you are signed out'
+    );
   }
+
+  setTimeout(function () {
+    mainView.toggleMessage();
+  }, 2500);
 };
 
 const initAuthorizeGoogle = function () {
@@ -143,8 +120,8 @@ const init = function () {
   eventsView.addHandlerClearEvents(controlClearEvents);
 
   // mainView.renderMessage('⏳ Authorizing access to Google Calendar');
-  mainView.addHandlerAuthorizeGoogle(authorizeGoogle);
-  mainView.addHandlerSignoutGoogle(signoutGoogle);
+  mainView.addHandlerSignInSignOutGoogle(handleSignInSignOutGoogle);
+  mainView.addHandlerRevokeAccessGoogle(revokeAccessGoogle);
   gapi.load('client:auth2', initAuthorizeGoogle);
 
   // _btnCreateDummyEvent.addEventListener('click', createDummyEvent);

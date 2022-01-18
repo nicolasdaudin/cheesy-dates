@@ -47,24 +47,24 @@ export const createCalendar = async function () {
   state.calendarId = cheesyDatesCalendar.id;
 };
 
-export const createGoogleDummyEvent = async function () {
-  const newDummyEvent = {
-    summary: 'dummy event title',
-    start: {
-      dateTime: '2022-01-11T11:00:00',
-      timeZone: 'Europe/Madrid',
-    },
-    end: {
-      dateTime: '2022-01-11T17:00:00',
-      timeZone: 'Europe/Madrid',
-    },
-  };
-  const insertedDummyEventData = await gapi.client.calendar.events.insert({
-    calendarId: state.calendarId,
-    ...newDummyEvent,
-  });
-  console.log('Inserted Dummy Event', insertedDummyEventData.result);
-};
+// export const createGoogleDummyEvent = async function () {
+//   const newDummyEvent = {
+//     summary: 'dummy event title',
+//     start: {
+//       dateTime: '2022-01-11T11:00:00',
+//       timeZone: 'Europe/Madrid',
+//     },
+//     end: {
+//       dateTime: '2022-01-11T17:00:00',
+//       timeZone: 'Europe/Madrid',
+//     },
+//   };
+//   const insertedDummyEventData = await gapi.client.calendar.events.insert({
+//     calendarId: state.calendarId,
+//     ...newDummyEvent,
+//   });
+//   console.log('Inserted Dummy Event', insertedDummyEventData.result);
+// };
 
 export const createEvent = function (data) {
   const eventFirstDate = data.date;
@@ -136,47 +136,47 @@ export const createEventInGoogle = async function (event) {
       ...googleEvent,
     });
     console.log('Event inserted in Google Calendar', data.result);
-
-    // console.log(googleEvent);
   }
+
+  // console.log(googleEvent);
 };
 
-export const createGoogleRecurringDummyEvents = async function () {
-  const dummyRRule = new RRule({
-    freq: RRule.DAILY,
-    dtstart: new Date(Date.UTC(2022, 0, 13, 0, 0, 0)),
-    count: 10,
-    interval: 2,
-  });
-  console.log(dummyRRule.all());
-  dummyRRule.all().forEach((dummyDate, i) => {
-    const celebrated = dummyRRule.options.interval * i + ' days';
-    const date = DateTime.fromJSDate(dummyDate).toISODate();
-    console.log(dummyDate, date, celebrated);
-    const newDummyRecurringEvent = {
-      summary: `${celebrated} since Jime and Nico are together`,
-      description: `%%${dummyRRule.toString()}%%`,
-      start: {
-        date,
-      },
-      end: {
-        date,
-      },
-    };
+// export const createGoogleRecurringDummyEvents = async function () {
+//   const dummyRRule = new RRule({
+//     freq: RRule.DAILY,
+//     dtstart: new Date(Date.UTC(2022, 0, 13, 0, 0, 0)),
+//     count: 10,
+//     interval: 2,
+//   });
+//   console.log(dummyRRule.all());
+//   dummyRRule.all().forEach((dummyDate, i) => {
+//     const celebrated = dummyRRule.options.interval * i + ' days';
+//     const date = DateTime.fromJSDate(dummyDate).toISODate();
+//     console.log(dummyDate, date, celebrated);
+//     const newDummyRecurringEvent = {
+//       summary: `${celebrated} since Jime and Nico are together`,
+//       description: `%%${dummyRRule.toString()}%%`,
+//       start: {
+//         date,
+//       },
+//       end: {
+//         date,
+//       },
+//     };
 
-    const insertedDummyRecurringEventData = gapi.client.calendar.events
-      .insert({
-        calendarId: state.calendarId,
-        ...newDummyRecurringEvent,
-      })
-      .then(() => {
-        console.log(
-          'Inserted Dummy Recurring Event',
-          insertedDummyRecurringEventData.result
-        );
-      });
-  });
-};
+//     const insertedDummyRecurringEventData = gapi.client.calendar.events
+//       .insert({
+//         calendarId: state.calendarId,
+//         ...newDummyRecurringEvent,
+//       })
+//       .then(() => {
+//         console.log(
+//           'Inserted Dummy Recurring Event',
+//           insertedDummyRecurringEventData.result
+//         );
+//       });
+//   });
+// };
 
 const init = function () {
   const storedEvents = JSON.parse(localStorage.getItem('events'));

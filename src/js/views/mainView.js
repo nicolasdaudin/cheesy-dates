@@ -1,25 +1,27 @@
 class MainView {
-  _btnAuthorizeGoogle = document.querySelector('.options-auth-google-calendar');
-  _btnSignoutGoogle = document.querySelector(
-    '.options-signout-google-calendar'
+  _btnSignInSignOut = document.querySelector(
+    '.options-sign-in-out-google-calendar'
+  );
+  _btnRevokeAccess = document.querySelector(
+    '.options-revoke-access-google-calendar'
   );
   _containerStatusMessage = document.querySelector('.status-message');
 
-  showAuthorizeGoogleButton() {
-    this._btnAuthorizeGoogle.classList.remove('hidden');
-    this._btnSignoutGoogle.classList.add('hidden');
+  showGoogleAuthorizedButtons() {
+    this._btnSignInSignOut.textContent = 'Sign Out';
+    this._btnRevokeAccess.classList.remove('hidden');
   }
-  showSignoutGoogleButton() {
-    this._btnAuthorizeGoogle.classList.add('hidden');
-    this._btnSignoutGoogle.classList.remove('hidden');
-  }
-
-  addHandlerAuthorizeGoogle(handler) {
-    this._btnAuthorizeGoogle.addEventListener('click', handler);
+  showGoogleNotAuthorizedButtons() {
+    this._btnSignInSignOut.textContent = 'Sign In/Authorize';
+    this._btnRevokeAccess.classList.add('hidden');
   }
 
-  addHandlerSignoutGoogle(handler) {
-    this._btnSignoutGoogle.addEventListener('click', handler);
+  addHandlerSignInSignOutGoogle(handler) {
+    this._btnSignInSignOut.addEventListener('click', handler);
+  }
+
+  addHandlerRevokeAccessGoogle(handler) {
+    this._btnRevokeAccess.addEventListener('click', handler);
   }
 
   renderMessage(message) {
