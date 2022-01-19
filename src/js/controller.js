@@ -7,17 +7,12 @@ import eventsView from './views/eventsView.js';
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
-import { UPLOAD_WINDOW_HEADINGS, GOOGLE_SCOPES } from './config.js';
+import { UPLOAD_WINDOW_HEADINGS } from './config.js';
 
 import eventsView from './views/eventsView.js';
 import mainView from './views/mainView.js';
 
-import {
-  GoogleAuth,
-  initGoogle,
-  handleSignInSignOutGoogle,
-  revokeAccessGoogle,
-} from './googleHelper.js';
+import GoogleAuth from './googleHelper.js';
 
 if (module.hot) {
   module.hot.accept();
@@ -83,8 +78,7 @@ const controlClearEvents = function () {
 };
 
 const controlUpdateSigninStatus = function () {
-  const user = GoogleAuth.currentUser.get();
-  const isAuthorized = user.hasGrantedScopes(GOOGLE_SCOPES);
+  const isAuthorized = GoogleAuth.isAuthorized();
 
   if (isAuthorized) {
     mainView.showGoogleAuthorizedButtons();
@@ -104,7 +98,7 @@ const controlUpdateSigninStatus = function () {
 };
 
 const initAuthorizeGoogle = function () {
-  initGoogle(controlUpdateSigninStatus);
+  GoogleAuth.init(controlUpdateSigninStatus);
 };
 
 const init = function () {
@@ -120,8 +114,12 @@ const init = function () {
   eventsView.addHandlerClearEvents(controlClearEvents);
 
   // mainView.renderMessage('⏳ Authorizing access to Google Calendar');
-  mainView.addHandlerSignInSignOutGoogle(handleSignInSignOutGoogle);
-  mainView.addHandlerRevokeAccessGoogle(revokeAccessGoogle);
+  mainView.addHandlerSignInSignOutGoogle(
+    GoogleAuth.handleSignInSignOut.bind(GoogleAuth)
+  );
+  mainView.addHandlerRevokeAccessGoogle(
+    GoogleAuth.revokeAccess.bind(GoogleAuth)
+  );
   gapi.load('client:auth2', initAuthorizeGoogle);
 
   // _btnCreateDummyEvent.addEventListener('click', createDummyEvent);
