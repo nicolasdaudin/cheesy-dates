@@ -269,6 +269,11 @@ h2 {
   border-radius: 1rem;
 }
 
+.upload .next-event-date {
+  font-size: 1.2rem;
+  font-style: italic;
+}
+
 .upload .upload__btn {
   grid-column: 1 / -1;
   justify-self: center;

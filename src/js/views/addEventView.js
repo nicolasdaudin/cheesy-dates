@@ -1,3 +1,5 @@
+import { DateTime } from 'luxon';
+
 class AddEventView {
   _parentElement = document.querySelector('.upload'); // formAddEvent
   _window = document.querySelector('.add-event-window');
@@ -8,13 +10,17 @@ class AddEventView {
   _btnAddBirthday = document.querySelector('.add-event--birthday');
   _btnAddAchievement = document.querySelector('.add-event--achievement');
 
+  _dateInput = this._parentElement.querySelector('input[type="date"]');
+
   _labelHeading = document.querySelector('.upload-heading');
   _labelSubheading = document.querySelector('.upload-subheading');
   _labelEventType = document.querySelector('.upload-event__type');
 
+  _containerNextEvents = document.querySelector('.add-event-next-events');
+
   constructor() {
-    // this._addHandlerShowWindow();
     this._addHandlerHideWindow();
+    this._oldDate = this._dateInput.value;
   }
 
   clearForm() {
@@ -67,6 +73,36 @@ class AddEventView {
   _addHandlerHideWindow() {
     this._btnClose.addEventListener('click', this.toggleWindow.bind(this));
     this._overlay.addEventListener('click', this.toggleWindow.bind(this));
+  }
+
+  addHandlerDateChange(handler) {
+    // 'change' gets fired at every key stroke. with 'blur' this gets fired only when the field is unfocused - so we check if the date hs changed.
+    this._dateInput.addEventListener(
+      'blur',
+      function (e) {
+        if (this._oldDate !== this._dateInput.value) {
+          // TODO: use formData instead?
+          const newDateValue = this._dateInput.value;
+          this._oldDate = newDateValue;
+          console.log('updating reminders with new date', newDateValue);
+
+          handler(newDateValue);
+        }
+      }.bind(this)
+    );
+  }
+
+  renderReminders(reminders) {
+    const markup = reminders
+      .map((reminder) => {
+        return `<p class="next-event-date">${DateTime.fromISO(
+          reminder
+        ).toLocaleString(DateTime.DATE_HUGE)}</p>`;
+      })
+      .join('');
+
+    this._containerNextEvents.innerHTML = '';
+    this._containerNextEvents.insertAdjacentHTML('afterbegin', markup);
   }
 
   addHandlerUpload(handler) {

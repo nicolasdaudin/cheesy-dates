@@ -141,6 +141,43 @@ export const createEventInGoogle = async function (event) {
   // console.log(googleEvent);
 };
 
+export const computeTempReminders = function (date) {
+  // map of reminders to be calculated according to tupe of events
+
+  // I could have used RRule but there's no easy way to output recurring dates only after a certain date
+  // the 'dtstart' is only to start the recurring rule so for example 14-january-2011
+  // but if we want the results after 20 january 2022 we would need to generate many recurring events first (count: 10000 for example)
+
+  const dt = DateTime.fromISO(date);
+
+  const reminders = [];
+
+  // only compute reminder up until YEAR_LIMIT (included)
+  const YEAR_LIMIT = DateTime.now().plus({ years: YEARS_LIMIT }).year;
+  // only compute this number of reminders for the temp reminders
+  const REMINDER_LIMIT = 10;
+
+  // TODO: use RRule (or later? or schedule?) to generate the recurring rule...
+
+  const whatReminders = REMINDER_EVERY.get(state.eventType);
+  console.log(whatReminders);
+
+  whatReminders.forEach(function (reminderType) {
+    let temp = dt.plus(reminderType);
+    // we add reminders until it reaches a certain year limit
+    for (let i = 0; temp.year <= YEAR_LIMIT; i++) {
+      // we only add the reminder if its date is after the current date
+      if (temp > DateTime.now()) {
+        reminders.push(temp.toISO());
+      }
+      temp = temp.plus(reminderType);
+    }
+  });
+  reminders.sort((a, b) => (a < b ? -1 : 1));
+  const onlySomeReminders = reminders.slice(0, REMINDER_LIMIT);
+
+  return onlySomeReminders;
+};
 // export const createGoogleRecurringDummyEvents = async function () {
 //   const dummyRRule = new RRule({
 //     freq: RRule.DAILY,

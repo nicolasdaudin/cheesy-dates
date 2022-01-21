@@ -97,6 +97,12 @@ const controlUpdateSigninStatus = function () {
   }, 2500);
 };
 
+const controlUpdateNextReminders = function (newDate) {
+  console.log('controlUpdateNextReminders', newDate);
+  const tempReminders = model.computeTempReminders(newDate);
+  addEventView.renderReminders(tempReminders);
+};
+
 const initAuthorizeGoogle = function () {
   GoogleAuth.init(controlUpdateSigninStatus);
 };
@@ -110,6 +116,7 @@ const init = function () {
 
   addEventView.addHandlerShowWindow(controlPrepareAddEventView);
   addEventView.addHandlerUpload(controlCreateEvent);
+  addEventView.addHandlerDateChange(controlUpdateNextReminders);
 
   eventsView.addHandlerClearEvents(controlClearEvents);
 
