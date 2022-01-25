@@ -111,6 +111,7 @@ const controlSelectLocale = function (locale) {
   mainView.translateAll(locale);
 };
 
+// TODO: clean and refactor init?
 const init = function () {
   const containerApp = document.querySelector('.app');
   containerApp.style.opacity = 100;

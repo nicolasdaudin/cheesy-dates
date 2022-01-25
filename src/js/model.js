@@ -11,7 +11,7 @@ import {
 export const state = {
   events: [],
   eventType: '',
-  locale: 'es-ES', // de-DE
+  locale: 'es-ES', // de-DE TODO: not sure locale is used at the moment... but we could use it to mark the user locale for that user? now it's not stored (but is its storage necessary???)
   calendarId: undefined,
 };
 
@@ -119,6 +119,7 @@ export const createEvent = function (data) {
 export const createEventInGoogle = async function (event) {
   const reminders = event.reminders.slice(0, GOOGLE_MAX_CALENDAR_EVENTS);
 
+  // TODO: this for (instead of forEach) might be because forEach does not wait on await instructions, so we had to choose for ... of
   for (const reminder of reminders) {
     const googleEvent = {
       summary: `${reminder.nb} ${reminder.type} - ${event.description}`,
@@ -141,6 +142,7 @@ export const createEventInGoogle = async function (event) {
   // console.log(googleEvent);
 };
 
+// TODO: probably can be merged with create Google above or below...
 export const computeTempReminders = function (date) {
   // map of reminders to be calculated according to tupe of events
 

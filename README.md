@@ -6,7 +6,15 @@ Cheesy Dates is a web-based pet project to allow you to add reminders about impo
 
 The app allows you to add corresponding events in Google Calendar, like "500 days since you stopped smoking" or "Celebrating 1500 days since your first kiss with Melinda"
 
+## Check it out
+
+[It's here](https://cheesy-dates.netlify.app/)
+
 ## Build
+
+We use Parcel. Parcel [automatically loads environment variables from .env files in local](https://parceljs.org/features/node-emulation/#.env-files).
+
+Build and launch with
 
 ```bash
 npm start
