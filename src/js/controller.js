@@ -140,7 +140,7 @@ const init = function () {
     console.log('Detected navigator language:', language, locale);
 
     // translate
-    mainView.translateAll('locale');
+    mainView.translateAll(locale);
 
     // init the locale switcher to the correct locale
     mainView.selectInitLocale(locale);
