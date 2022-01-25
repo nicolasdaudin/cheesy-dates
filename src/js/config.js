@@ -35,3 +35,5 @@ export const REMINDER_EVERY = new Map();
 REMINDER_EVERY.set('anniversary', [{ days: 500 }, { months: 5 }, { years: 1 }]);
 REMINDER_EVERY.set('birthday', [{ years: 1 }, { days: 1000 }]);
 REMINDER_EVERY.set('achievement', [{ days: 100 }, { years: 1 }, { months: 1 }]);
+
+export const DEFAULT_LOCALE = 'en';

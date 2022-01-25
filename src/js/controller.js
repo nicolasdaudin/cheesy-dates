@@ -7,7 +7,7 @@ import eventsView from './views/eventsView.js';
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
-import { UPLOAD_WINDOW_HEADINGS } from './config.js';
+import { UPLOAD_WINDOW_HEADINGS, DEFAULT_LOCALE } from './config.js';
 
 import eventsView from './views/eventsView.js';
 import mainView from './views/mainView.js';
@@ -107,6 +107,10 @@ const initAuthorizeGoogle = function () {
   GoogleAuth.init(controlUpdateSigninStatus);
 };
 
+const controlSelectLocale = function (locale) {
+  mainView.translateAll(locale);
+};
+
 const init = function () {
   const containerApp = document.querySelector('.app');
   containerApp.style.opacity = 100;
@@ -129,6 +133,20 @@ const init = function () {
   );
   gapi.load('client:auth2', initAuthorizeGoogle);
 
-  // _btnCreateDummyEvent.addEventListener('click', createDummyEvent);
+  document.addEventListener('DOMContentLoaded', () => {
+    // get browser locale
+    const language = navigator.language;
+    const locale = language.split('-')[0];
+    console.log('Detected navigator language:', language, locale);
+
+    // translate
+    mainView.translateAll('locale');
+
+    // init the locale switcher to the correct locale
+    mainView.selectInitLocale(locale);
+
+    // prepare handler for the locale switcher
+    mainView.addHandlerSelectLocale(controlSelectLocale);
+  });
 };
 init();

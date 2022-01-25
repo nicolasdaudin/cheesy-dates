@@ -19,6 +19,11 @@
     <nav>
       <p class="welcome">Welcome to Cheesy Dates</p>
       <img src="/src/img/logo.png" alt="Logo" class="logo" />
+      <select class="locale-switcher">
+        <option value="en">English 🇬🇧</option>
+        <option value="fr">Français 🇫🇷</option>
+        <option value="es">Español 🇪🇸</option>
+      </select>
     </nav>
 
     <main class="app">
@@ -27,18 +32,18 @@
         class="add-event add-event--anniversary"
         data-event-type="anniversary"
       >
-        <h2>Add anniversary 💍</h2>
+        <h2 data-i18n-key="add-anniversary">Add anniversary 💍</h2>
       </div>
 
       <div class="add-event add-event--birthday" data-event-type="birthday">
-        <h2>Add birthday 🎂</h2>
+        <h2 data-i18n-key="add-birthday">Add birthday 🎂</h2>
       </div>
 
       <div
         class="add-event add-event--achievement"
         data-event-type="achievement"
       >
-        <h2>Add achievement 🚭</h2>
+        <h2 data-i18n-key="add-achievement">Add achievement 🚭</h2>
       </div>
 
       <!-- EVENTS -->
@@ -110,6 +115,9 @@
       &copy; by <a href="https://twitter.com/nicolasdaudin">Nicolas Daudin</a>.
       Adapted from
       <a href="https://twitter.com/jonasschmedtman">Jonas Schmedtmann</a>.
+      <a href="https://thenounproject.com/icon/translate-2822451/"
+        >Translate by Icon Lauk from NounProject.com</a
+      >
     </footer>
 
     <script src="https://apis.google.com/js/api.js"></script>
