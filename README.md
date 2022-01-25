@@ -14,11 +14,11 @@ npm start
 
 Gets deployed on http://localhost:1234
 
-## Storage
+## Storage
 
 Events and reminders are currently stored in Local Storage.
 
-## Google Calendar
+## Google Calendar
 
 The app uses Google Calendar API and will try to connect you to Google services using OAuth 2.0.
 
